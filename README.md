@@ -1,3 +1,3 @@
-# rainbowtype-app-boilerplate1
+# React SPA app with SAML authentication test
 
-rainbowtype service boilerplate for using Websocket.
+This is a PoC for React SPA with SAML authentication.
