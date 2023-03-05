@@ -9,6 +9,8 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { Link } from 'react-router-dom';
 
+const url = window.location.origin;
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -64,7 +66,7 @@ function NavBar(props: IProps) {
           <MenuItem onClick={() => clickHandler()}>
             <Link to="/profile">PROFILE</Link>
           </MenuItem>
-          <MenuItem onClick={() => window.location.replace("http://example.com:4000/slogout")}>
+          <MenuItem onClick={() => window.location.replace(url + "/slogout")}>
             LOGOUT
           </MenuItem>
         </Drawer>

@@ -1,7 +1,7 @@
 const config = {
     saml: {
         cert: "./config/saml.pem",
-        entryPoint: "https://some-id-provider.com/auth/realms/kmwebnet/protocol/saml",
+        entryPoint: "https://kmwebnet.tokyo/auth/realms/samltest/protocol/saml",
         issuer: "samltest",
         options: {
             failureRedirect: "/slogin",

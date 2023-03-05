@@ -3,6 +3,8 @@ import Button from '@material-ui/core/Button';
 
 import { useLogin } from '../../AuthUserContext';
 
+const url = window.location.origin;
+
 const LoginPage = () => {
 
   const [userId, setUserId] = useState('');
@@ -17,7 +19,7 @@ const LoginPage = () => {
       <h1>ログイン</h1>
       <input type="text" value={userId} onChange={(e) => setUserId(e.target.value)} />
       <Button onClick={handleLogin}>送信</Button>
-      <Button onClick={() => window.location.replace("http://example.com:4000/slogin")}>シングルサインオン</Button>
+      <Button onClick={() => window.location.replace(url + "/slogin")}>シングルサインオン</Button>
     </div>
   );
 };

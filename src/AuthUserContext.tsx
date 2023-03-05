@@ -3,6 +3,8 @@ import React, { createContext, useContext, useState } from 'react';
 import AuthUser from './models/auth';
 import axios from "axios";
 
+const url = window.location.origin;
+
 type OperationType = {
   login: (userId: string) => void
   logout: () => void
@@ -33,7 +35,7 @@ const AuthUserProvider: React.FC = ({ children }) => {
     console.log("checking authentication by calling /whoami");
 
     axios
-      .get("http://example.com:4000/whoami", {
+      .get(url + "/whoami", {
         withCredentials: true,
       })
       .then((res) => {

@@ -10,25 +10,27 @@ const express_1 = __importDefault(require("express"));
 const express_session_1 = __importDefault(require("express-session"));
 const passport_1 = __importDefault(require("passport"));
 const http_1 = __importDefault(require("http"));
-// import https from 'https';
-const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const logging_1 = __importDefault(require("./config/logging"));
 const config_1 = __importDefault(require("./config/config"));
 require("./config/passport");
+/*
 const options = {
-    key: fs_1.default.readFileSync('/usr/src/app/certs/server.key'),
-    cert: fs_1.default.readFileSync('/usr/src/app/certs/server.chain'),
-    ca: [
-        fs_1.default.readFileSync('/usr/src/app/certs/signer-ca.crt'),
-        fs_1.default.readFileSync('/usr/src/app/certs/root-ca.crt'),
-    ],
-    // requestCert: true,
-    // rejectUnauthorized: true,
+  key: fs.readFileSync('/usr/src/app/certs/server.key'),
+  cert: fs.readFileSync('/usr/src/app/certs/server.chain'),
+  ca: [
+    fs.readFileSync('/usr/src/app/certs/signer-ca.crt'),
+    fs.readFileSync('/usr/src/app/certs/root-ca.crt'),
+  ],
+  requestCert: true,
+  rejectUnauthorized: true,
 };
+*/
+const port = process.env.PORT || 4000;
 const app = express_1.default();
 //const httpsserver = https.createServer(options, app);
 const httpsserver = http_1.default.createServer(app);
+let url;
 // app
 app.use('/', express_1.default.static(__dirname + '/dist'));
 /** Log the request */
@@ -58,10 +60,10 @@ app.use((req, res, next) => {
 });
 /** Passport & SAML Routes */
 app.get('/slogin', passport_1.default.authenticate('saml', config_1.default.saml.options), (req, res, next) => {
-    return res.redirect('http://example.com:4000');
+    return res.redirect(url);
 });
 app.post('/slogin/callback', passport_1.default.authenticate('saml', config_1.default.saml.options), (req, res, next) => {
-    return res.redirect('http://example.com:4000');
+    return res.redirect(url);
 });
 app.get('/slogout', (req, res, next) => {
     if (req.isAuthenticated()) {
@@ -69,7 +71,7 @@ app.get('/slogout', (req, res, next) => {
             res.send(err);
         });
     }
-    return res.redirect('http://example.com:4000');
+    return res.redirect(url);
 });
 app.get('/whoami', (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -91,6 +93,7 @@ app.get('/healthcheck', (req, res, next) => {
 // for react-router
 app.get('/*', function (req, res) {
     res.sendFile(path_1.default.join(__dirname, 'dist', 'index.html'));
+    url = 'https://' + req.get('host');
 });
 /** Error handling */
 app.use((req, res, next) => {
@@ -100,4 +103,4 @@ app.use((req, res, next) => {
     });
 });
 // run server
-httpsserver.listen(4000, () => console.log('Listening on port 4000'));
+httpsserver.listen(port, () => console.log('Listening on port' + port));

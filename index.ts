@@ -13,6 +13,7 @@ import logging from './config/logging';
 import config from './config/config';
 import './config/passport';
 
+/*
 const options = {
   key: fs.readFileSync('/usr/src/app/certs/server.key'),
   cert: fs.readFileSync('/usr/src/app/certs/server.chain'),
@@ -20,13 +21,15 @@ const options = {
     fs.readFileSync('/usr/src/app/certs/signer-ca.crt'),
     fs.readFileSync('/usr/src/app/certs/root-ca.crt'),
   ],
-  // requestCert: true,
-  // rejectUnauthorized: true,
+  requestCert: true,
+  rejectUnauthorized: true,
 };
-
+*/
+const port = process.env.PORT || 4000;
 const app = express();
 //const httpsserver = https.createServer(options, app);
 const httpsserver = http.createServer(app);
+let url:string;
 
 // app
 app.use('/', express.static(__dirname + '/dist'));
@@ -67,11 +70,11 @@ app.use((req, res, next) => {
 
 /** Passport & SAML Routes */
 app.get('/slogin', passport.authenticate('saml', config.saml.options), (req, res, next) => {
-  return res.redirect('http://example.com:4000');
+  return res.redirect(url);
 });
 
 app.post('/slogin/callback', passport.authenticate('saml', config.saml.options), (req, res, next) => {
-  return res.redirect('http://example.com:4000');
+  return res.redirect(url);
 });
 
 app.get('/slogout',  (req, res, next) => {
@@ -80,7 +83,7 @@ app.get('/slogout',  (req, res, next) => {
       res.send(err);
     });
   }
-  return res.redirect('http://example.com:4000');
+  return res.redirect(url);
 });
 
 app.get('/whoami', (req, res, next) => {
@@ -105,7 +108,8 @@ app.get('/healthcheck', (req, res, next) => {
 
 // for react-router
 app.get('/*', function(req, res) {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'))
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  url = 'https://' + req.get('host');
 });
 
 
@@ -120,4 +124,4 @@ app.use((req, res, next) => {
 
 
 // run server
-httpsserver.listen(4000, () => console.log('Listening on port 4000'));
+httpsserver.listen(port, () => console.log('Listening on port' + port));
