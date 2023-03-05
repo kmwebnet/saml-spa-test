@@ -21,7 +21,7 @@ passport.use(
     new Strategy(
         {
             issuer: config.saml.issuer,
-            protocol: 'http://',
+            protocol: 'https://',
             path: '/slogin/callback',
             entryPoint: config.saml.entryPoint,
             cert: fs.readFileSync(config.saml.cert, 'utf-8')

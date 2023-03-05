@@ -19,7 +19,7 @@ passport_1.default.deserializeUser((expressUser, done) => {
 });
 passport_1.default.use(new passport_saml_1.Strategy({
     issuer: config_1.default.saml.issuer,
-    protocol: 'http://',
+    protocol: 'https://',
     path: '/slogin/callback',
     entryPoint: config_1.default.saml.entryPoint,
     cert: fs_1.default.readFileSync(config_1.default.saml.cert, 'utf-8')
